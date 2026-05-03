@@ -1,4 +1,3 @@
-markdown
 # Jeu d'Échecs - Fins de Partie
 
 ## Description
