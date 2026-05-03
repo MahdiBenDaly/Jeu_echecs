@@ -23,7 +23,3 @@ Le jeu supporte le déplacement des pièces, la détection d'échec, et la captu
 
 ## Sources des images
 Images des pièces : https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
-
-## Architecture
-- `modele/` : Logique du jeu (Piece, Roi, Tour, Cavalier, Fou, Dame, Echiquier)
-- `vue/` : Interface graphique Qt (Projet, EcranAccueil, EcranSelection)
