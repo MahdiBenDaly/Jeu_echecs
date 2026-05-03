@@ -121,7 +121,7 @@ bool Echiquier::cheminLibrePourFou(int ligneDepart, int colonneDepart, int ligne
             }
         }
         else {
-            for (int i = 1; std::abs(ligneDestination - ligneDepart); ++i) {
+            for (int i = 1; i < std::abs(ligneDestination - ligneDepart); ++i) {
                 if (caseOccuper(ligneDepart + i, colonneDepart + i)) return false;
             }
         }
@@ -142,8 +142,10 @@ bool Echiquier::cheminLibrePourFou(int ligneDepart, int colonneDepart, int ligne
 }
 
 bool Echiquier::cheminLibrePourDame(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const {
-    return cheminLibrePourFou(ligneDepart, colonneDepart, ligneDestination, colonneDestination) &&
-        cheminLibrePourTour(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
+    if (ligneDepart == ligneDestination || colonneDepart == colonneDestination)
+        return cheminLibrePourTour(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
+    else
+        return cheminLibrePourFou(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
 }
 
 bool Echiquier::deplacerPiece(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) {
@@ -207,6 +209,18 @@ bool Echiquier::estEnEchec(Couleur couleur) const {
                         continue;
                     }
                 }
+                else if (auto fou = dynamic_cast<Fou*>(autrePiece.get())) {
+                    if (!cheminLibrePourFou(fou->getLigne(), fou->getColonne(), ligneRoi, colonneRoi)) {
+                        continue;
+                    }
+                }
+                else if (auto dame = dynamic_cast<Dame*>(autrePiece.get())) {
+                    if (!cheminLibrePourDame(dame->getLigne(), dame->getColonne(), ligneRoi, colonneRoi)) {
+                        continue;
+                    }
+                }
+
+
 				if (autrePiece->mouvementValide(ligneRoi, colonneRoi) && autrePiece->getCouleur() != couleur) {
 					return true;
 				}
