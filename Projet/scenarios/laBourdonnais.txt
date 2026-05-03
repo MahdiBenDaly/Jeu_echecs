@@ -1,0 +1,4 @@
+tourBlanc 0 1
+cavalierNoir 1 0
+roiNoir 3 0
+roiBlanc 3 2

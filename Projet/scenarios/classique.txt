@@ -1,0 +1,16 @@
+roiBlanc 7 4
+dameBlanc 7 3
+tourBlanc 7 0
+tourBlanc 7 7
+cavalierBlanc 7 1
+cavalierBlanc 7 6
+fouBlanc 7 2
+fouBlanc 7 5
+roiNoir 0 4
+tourNoir 0 0
+tourNoir 0 7
+cavalierNoir 0 1
+cavalierNoir 0 6
+fouNoir 0 2
+fouNoir 0 5
+dameNoir 0 3
