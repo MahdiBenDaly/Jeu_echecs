@@ -1,9 +1,10 @@
 // Fichier :     Tour.h
-// Auteurs :     Mahdi Ben Daly et Adel Chaouki
+// Auteurs :     Mahdi Ben Daly
 // Date :        21 avril 2026
 // Description : Classe representant la tour dans le jeu d'echecs.
 
 #pragma once
+
 #include "Piece.h"
 
 

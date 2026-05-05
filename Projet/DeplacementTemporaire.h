@@ -1,5 +1,5 @@
 // Fichier :     DeplacementTemporaire.h
-// Auteurs :     Mahdi Ben Daly et Adel Chaouki
+// Auteurs :     Mahdi Ben Daly
 // Date :        21 avril 2026
 // Description : Classe RAII pour deplacer temporairement une piece.
 

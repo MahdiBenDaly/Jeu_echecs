@@ -1,8 +1,11 @@
+// Fichier :     Fou.h
+// Auteurs :     Mahdi Ben Daly
+// Date :        21 avril 2026
+// Description : Classe representant le fou dans le jeu d'echecs.
+
 #pragma once
 
 #include "Piece.h"
-
-
 
 namespace modele {
 	class Fou : public Piece {

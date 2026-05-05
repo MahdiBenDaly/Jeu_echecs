@@ -1,3 +1,8 @@
+// Fichier :     Dame.cpp
+// Auteurs :     Mahdi Ben Daly
+// Date :        21 avril 2026
+// Description : Implementation de la dame.
+
 #include "Dame.h"
 
 #include <cmath>

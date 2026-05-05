@@ -1,3 +1,8 @@
+// Fichier :     Pion.h
+// Auteurs :     Mahdi Ben Daly
+// Date :        21 avril 2026
+// Description : Classe representant le pion dans le jeu d'echecs.
+
 #pragma once
 
 #include "Piece.h"
