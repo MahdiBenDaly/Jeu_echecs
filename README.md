@@ -1,4 +1,4 @@
-# Jeu d'Échecs - Fins de Partie
+# Jeu d'Échecs
 
 ## Description
 Jeu d'échecs en C++ avec interface graphique Qt, axé sur les fins de partie.
