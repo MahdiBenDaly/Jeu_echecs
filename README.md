@@ -23,3 +23,6 @@ Le jeu supporte le déplacement des pièces, la détection d'échec, et la captu
 
 ## Sources des images
 Images des pièces : https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
+
+## Droits d'auteur
+Copyright © 2026 Mahdi Ben Daly. Tous droits réservés.
