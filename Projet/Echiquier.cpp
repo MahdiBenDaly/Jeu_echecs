@@ -6,6 +6,11 @@
 #include "Echiquier.h"
 
 #include "DeplacementTemporaire.h"
+#include "Roi.h"
+#include "Tour.h"
+#include "Cavalier.h"
+#include "Fou.h"
+#include "Dame.h"
 
 #include <algorithm>
 #include <fstream>
@@ -56,6 +61,12 @@ Echiquier::Echiquier(const string& nomDuFichier) {
         else if (nomPiece == "dameNoir") {
             ajouterPiece(make_unique<Dame>(ligne, colonne, Couleur::NOIR));
         }
+        else if (nomPiece == "pionBlanc") {
+            ajouterPiece(make_unique<Pion>(ligne, colonne, Couleur::BLANC));
+        }
+        else if (nomPiece == "pionNoir") {
+            ajouterPiece(make_unique<Pion>(ligne, colonne, Couleur::NOIR));
+        }
     }
 
 
@@ -77,7 +88,7 @@ Piece* Echiquier::caseOccuper(int ligne, int colonne) const {
 
 const vector<unique_ptr<Piece>>& Echiquier::getPieces() const { return pieces_; }
 
-bool Echiquier::cheminLibrePourTour(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const{
+bool Echiquier::cheminLibreLigneDroite(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const{
     if (ligneDepart == ligneDestination) {
         if (colonneDestination > colonneDepart) {
             for (int i = colonneDepart + 1; i < colonneDestination; ++i) {
@@ -144,18 +155,42 @@ bool Echiquier::cheminLibrePourFou(int ligneDepart, int colonneDepart, int ligne
 
 bool Echiquier::cheminLibrePourDame(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const {
     if (ligneDepart == ligneDestination || colonneDepart == colonneDestination)
-        return cheminLibrePourTour(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
+        return cheminLibreLigneDroite(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
     else
         return cheminLibrePourFou(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
 }
 
+bool Echiquier::mouvementValidePion(Pion* pion, int ligneDestination, int colonneDestination) const {
+    int colonneDepart = pion->getColonne();
+    int ligneDepart = pion->getLigne();
+    int direction = pion->getDirection();
+    
+    Piece* caseDestination = caseOccuper(ligneDestination, colonneDestination);
+
+    Couleur couleur = pion->getCouleur();
+
+    if (pion->mouvementValide(ligneDestination, colonneDestination) && caseDestination == nullptr) return true;
+
+    if (ligneDepart + direction == ligneDestination && colonneDepart + 1 == colonneDestination && caseDestination != nullptr) return true;
+
+    if (ligneDepart + direction == ligneDestination && colonneDepart - 1 == colonneDestination && caseDestination != nullptr) return true;
+
+    return false;
+
+}
+
 bool Echiquier::deplacerPiece(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) {
     auto pieceCaseDebut = caseOccuper(ligneDepart, colonneDepart);
+    auto pion = dynamic_cast<Pion*>(pieceCaseDebut);
 
     if (pieceCaseDebut == nullptr) return false;
     
+    if (pion != nullptr) {
+        if (!mouvementValidePion(pion, ligneDestination, colonneDestination)) return false;
 
-    if (!pieceCaseDebut->mouvementValide(ligneDestination, colonneDestination)) return false;
+        if (!cheminLibreLigneDroite(ligneDepart, colonneDepart, ligneDestination, colonneDestination)) return false;
+    }
+    else if (!pieceCaseDebut->mouvementValide(ligneDestination, colonneDestination)) return false;
 
     if ((pieceCaseDebut->getCouleur() == Couleur::BLANC && couleurABouger_ != false) || 
         (pieceCaseDebut->getCouleur() == Couleur::NOIR && couleurABouger_ != true)) return false;
@@ -165,7 +200,7 @@ bool Echiquier::deplacerPiece(int ligneDepart, int colonneDepart, int ligneDesti
     if (pieceCaseDestination != nullptr && pieceCaseDestination->getCouleur() == pieceCaseDebut->getCouleur()) return false;
 
     if (auto tour = dynamic_cast<Tour*>(pieceCaseDebut)) {
-        if (!cheminLibrePourTour(tour->getLigne(), tour->getColonne(), ligneDestination, colonneDestination)) return false;
+        if (!cheminLibreLigneDroite(tour->getLigne(), tour->getColonne(), ligneDestination, colonneDestination)) return false;
     }
 
     if (auto fou = dynamic_cast<Fou*>(pieceCaseDebut)) {
@@ -194,6 +229,9 @@ bool Echiquier::deplacerPiece(int ligneDepart, int colonneDepart, int ligneDesti
     }
 
     pieceEnCase.confimer();
+    
+    if (pion != nullptr) pion->retirerDroitDeuxCases();
+
     couleurABouger_ = !couleurABouger_;
     return true;
 }
@@ -207,7 +245,7 @@ bool Echiquier::estEnEchec(Couleur couleur) const {
 
 			for (auto& autrePiece : pieces_) {
                 if (auto tour = dynamic_cast<Tour*>(autrePiece.get())) {
-                    if (!cheminLibrePourTour(tour->getLigne(), tour->getColonne(), ligneRoi, colonneRoi)) {
+                    if (!cheminLibreLigneDroite(tour->getLigne(), tour->getColonne(), ligneRoi, colonneRoi)) {
                         continue;
                     }
                 }

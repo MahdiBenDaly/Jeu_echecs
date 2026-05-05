@@ -11,6 +11,8 @@ namespace modele {
 
 		void retirerDroitDeuxCases();
 
+		int getDirection() const;
+
 	private:
 		bool premierMouvement_ = false;
 	};

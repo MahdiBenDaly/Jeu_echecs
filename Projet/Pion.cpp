@@ -5,12 +5,14 @@ using namespace modele;
 
 Pion::Pion(int ligne, int colonne, Couleur couleur) : Piece(ligne, colonne, couleur), premierMouvement_(true) {}
 
+int Pion::getDirection() const {
+	if (getCouleur() == Couleur::BLANC) return -1;
+
+	else return 1;
+}
 
 bool Pion::mouvementValide(int ligneDestination, int colonneDestination) const {
-	int direction = 0;
-	if (getCouleur() == Couleur::BLANC) direction = -1;
-
-	else direction = 1;
+	int direction = getDirection();
 
 	if (ligneDestination == getLigne() + direction && colonneDestination == getColonne()) return true;
 

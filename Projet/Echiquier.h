@@ -5,11 +5,8 @@
 
 #pragma once
 
-#include "Roi.h"
-#include "Tour.h"
-#include "Cavalier.h"
-#include "Fou.h"
-#include "Dame.h"
+#include "Piece.h"
+#include "Pion.h"
 
 
 #include <vector>
@@ -34,7 +31,9 @@ namespace modele {
 	private:
 		bool estEnEchec(Couleur couleur) const;
 
-		bool cheminLibrePourTour(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const;
+		bool mouvementValidePion(Pion* pion, int ligneDestination, int colonneDestination) const;
+
+		bool cheminLibreLigneDroite(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const;
 		bool cheminLibrePourFou(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const;
 		bool cheminLibrePourDame(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const;
 

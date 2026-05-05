@@ -7,6 +7,12 @@
 #include <QPainter>
 #include <QMouseEvent>
 
+#include "Roi.h"
+#include "Tour.h"
+#include "Cavalier.h"
+#include "Fou.h"
+#include "Dame.h"
+
 using namespace modele;
 using namespace vue;
 using namespace std;
@@ -32,12 +38,15 @@ Projet::Projet(const string& nomDuFichier, QWidget* parent) : QMainWindow(parent
     images_["cavalierBlanc"] = QPixmap{ "images/cavalierBlanc.png" };
     images_["fouBlanc"] = QPixmap{ "images/fouBlanc.png" };
     images_["dameBlanc"] = QPixmap{ "images/dameBlanc.png" };
+    images_["PionBlanc"] = QPixmap{ "images/pionBlanc.png" };
+
 
     images_["roiNoir"] = QPixmap{ "images/roiNoir.png" };
     images_["tourNoir"] = QPixmap{ "images/tourNoir.png" };
     images_["cavalierNoir"] = QPixmap{ "images/cavalierNoir.png" };
     images_["FouNoir"] = QPixmap{ "images/fouNoir.png" };
     images_["dameNoir"] = QPixmap{ "images/dameNoir.png" };
+    images_["PionNoir"] = QPixmap{ "images/pionNoir.png" };
 
 }
 
@@ -112,6 +121,15 @@ void Projet::paintEvent(QPaintEvent* event) {
                 painter.drawPixmap(x, y, TAILLE_PIECE, TAILLE_PIECE, images_["dameNoir"]);
             }
         }
+        else if (auto pion = dynamic_cast<Pion*>(piece.get())) {
+            if (pion->getCouleur() == Couleur::BLANC) {
+                painter.drawPixmap(x, y, TAILLE_PIECE, TAILLE_PIECE, images_["PionBlanc"]);
+            }
+            else {
+                painter.drawPixmap(x, y, TAILLE_PIECE, TAILLE_PIECE, images_["PionNoir"]);
+            }
+        }
+
 
     }
     }
