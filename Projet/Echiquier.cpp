@@ -141,6 +141,7 @@ bool Echiquier::cheminLibrePourFou(int ligneDepart, int colonneDepart, int ligne
     return true;
 }
 
+
 bool Echiquier::cheminLibrePourDame(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination) const {
     if (ligneDepart == ligneDestination || colonneDepart == colonneDestination)
         return cheminLibrePourTour(ligneDepart, colonneDepart, ligneDestination, colonneDestination);
@@ -152,6 +153,7 @@ bool Echiquier::deplacerPiece(int ligneDepart, int colonneDepart, int ligneDesti
     auto pieceCaseDebut = caseOccuper(ligneDepart, colonneDepart);
 
     if (pieceCaseDebut == nullptr) return false;
+    
 
     if (!pieceCaseDebut->mouvementValide(ligneDestination, colonneDestination)) return false;
 

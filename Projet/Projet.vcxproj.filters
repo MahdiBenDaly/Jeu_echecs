@@ -70,6 +70,9 @@
     <ClCompile Include="Dame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Pion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Piece.h">
@@ -97,6 +100,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Dame.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Pion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
