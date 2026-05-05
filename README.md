@@ -26,3 +26,4 @@ Images des pièces : https://commons.wikimedia.org/wiki/Category:SVG_chess_piece
 
 ## Droits d'auteur
 Copyright © 2026 Mahdi Ben Daly. Tous droits réservés.
+Aucune licence open source n'est accordée pour le moment.
