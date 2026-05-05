@@ -21,10 +21,10 @@ const int TAILLE_CASE = 80;
 const int TAILLE_BORDURE = 30;
 const int TAILLE_PIECE = TAILLE_CASE - 5;
 
-const QColor marronClair(240, 217, 181);
-const QColor marronFonce(181, 136, 99);
-const QColor jaune(255, 255, 0);
-const QColor rouge(255, 0, 0, 150);
+const QColor MARRON_CLAIR(240, 217, 181);
+const QColor MARRON_FONCE(181, 136, 99);
+const QColor JAUNE(255, 255, 0);
+const QColor ROUGE(255, 0, 0, 150);
 
 bool mettreCaseJaune = false;
 
@@ -64,16 +64,16 @@ void Projet::paintEvent(QPaintEvent* event) {
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 if ((i + j) % 2 == 0)
-                    painter.setBrush(marronClair);
+                    painter.setBrush(MARRON_CLAIR);
                 else
-                    painter.setBrush(marronFonce);
+                    painter.setBrush(MARRON_FONCE);
 
                 painter.drawRect(j * TAILLE_CASE + TAILLE_BORDURE, i * TAILLE_CASE + TAILLE_BORDURE, TAILLE_CASE, TAILLE_CASE);
             }
         }
    
     if (ligneSelectionnee_ != -1) {
-        painter.setBrush(jaune);
+        painter.setBrush(JAUNE);
         painter.drawRect(colonneSelectionnee_ * TAILLE_CASE + TAILLE_BORDURE, 
             ligneSelectionnee_ * TAILLE_CASE + TAILLE_BORDURE, TAILLE_CASE, TAILLE_CASE);
     }
@@ -83,7 +83,7 @@ void Projet::paintEvent(QPaintEvent* event) {
             if (echiquier_.estEnEchec(roi->getCouleur())) {
                 int x = roi->getColonne() * TAILLE_CASE + TAILLE_BORDURE;
                 int y = roi->getLigne() * TAILLE_CASE + TAILLE_BORDURE;
-                painter.setBrush(rouge);
+                painter.setBrush(ROUGE);
                 painter.setPen(Qt::NoPen);
                 painter.drawRect(x, y, TAILLE_CASE, TAILLE_CASE);
             }
