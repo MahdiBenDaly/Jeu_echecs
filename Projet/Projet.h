@@ -22,6 +22,8 @@ namespace vue {
         Projet(const std::string& nomDuFichier, QWidget* parent = nullptr );
         ~Projet() = default;
 
+        void verifierEchec() const;
+
     protected:
         void paintEvent(QPaintEvent* event) override;
         void mousePressEvent(QMouseEvent* event) override;

@@ -24,6 +24,7 @@ const int TAILLE_PIECE = TAILLE_CASE - 5;
 const QColor marronClair(240, 217, 181);
 const QColor marronFonce(181, 136, 99);
 const QColor jaune(255, 255, 0);
+const QColor rouge(255, 0, 0, 150);
 
 bool mettreCaseJaune = false;
 
@@ -75,6 +76,18 @@ void Projet::paintEvent(QPaintEvent* event) {
         painter.setBrush(jaune);
         painter.drawRect(colonneSelectionnee_ * TAILLE_CASE + TAILLE_BORDURE, 
             ligneSelectionnee_ * TAILLE_CASE + TAILLE_BORDURE, TAILLE_CASE, TAILLE_CASE);
+    }
+
+    for (const auto& piece : echiquier_.getPieces()) {
+        if (auto roi = dynamic_cast<Roi*>(piece.get())) {
+            if (echiquier_.estEnEchec(roi->getCouleur())) {
+                int x = roi->getColonne() * TAILLE_CASE + TAILLE_BORDURE;
+                int y = roi->getLigne() * TAILLE_CASE + TAILLE_BORDURE;
+                painter.setBrush(rouge);
+                painter.setPen(Qt::NoPen);
+                painter.drawRect(x, y, TAILLE_CASE, TAILLE_CASE);
+            }
+        }
     }
 
     for (auto& piece : echiquier_.getPieces()) {
@@ -130,6 +143,9 @@ void Projet::paintEvent(QPaintEvent* event) {
             }
         }
 
+        
+
+
 
     }
     }
@@ -158,4 +174,8 @@ void Projet::mousePressEvent(QMouseEvent* click) {
     }
     mettreCaseJaune = !mettreCaseJaune;
     update();
+}
+
+void Projet::verifierEchec() const {
+    
 }

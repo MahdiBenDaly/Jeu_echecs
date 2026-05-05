@@ -26,10 +26,10 @@ namespace modele {
 		modele::Piece* caseOccuper(int ligne, int colonne) const;
 
 		bool deplacerPiece(int ligneDepart, int colonneDepart, int ligneDestination, int colonneDestination);
-
+		bool estEnEchec(Couleur couleur) const;
 
 	private:
-		bool estEnEchec(Couleur couleur) const;
+		
 
 		bool mouvementValidePion(Pion* pion, int ligneDestination, int colonneDestination) const;
 
