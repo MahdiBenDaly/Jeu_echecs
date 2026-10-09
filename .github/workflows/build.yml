@@ -1,0 +1,107 @@
+name: Build Windows and macOS game
+
+on:
+  push:
+    branches: [master]
+    tags: ['v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            os: windows-2022
+            qt-arch: win64_msvc2022_64
+            artifact-name: chess-windows
+          - name: macOS
+            os: macos-15
+            qt-arch: clang_64
+            artifact-name: chess-macos
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Qt 6
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.3'
+          arch: ${{ matrix.qt-arch }}
+          target: desktop
+          cache: false
+
+      - name: Configure CMake (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 "-DCMAKE_PREFIX_PATH=$env:QT_ROOT_DIR"
+
+      - name: Configure CMake (macOS)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: cmake -S . -B build -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release "-DCMAKE_PREFIX_PATH=$QT_ROOT_DIR"
+
+      - name: Build game
+        run: cmake --build build --config Release --parallel 2
+
+      # CMake's Qt deployment script copies Qt libraries and plugins here.
+      - name: Install application and dependencies
+        run: cmake --install build --config Release --prefix "${{ github.workspace }}/stage"
+
+      - name: Verify Windows files and make ZIP
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          if (!(Test-Path "stage/bin/JeuEchecs.exe")) { throw "Missing Windows executable" }
+          if (!(Test-Path "stage/bin/images/roiBlanc.png")) { throw "Missing chess images" }
+          if (!(Test-Path "stage/bin/scenarios/classique.txt")) { throw "Missing chess scenarios" }
+          if (!(Test-Path "stage/bin/platforms/qwindows.dll")) { throw "Missing Qt Windows platform plugin" }
+          New-Item -ItemType Directory -Force -Path out | Out-Null
+          Compress-Archive -Path "stage/*" -DestinationPath "out/JeuEchecs-Windows-x64.zip" -Force
+
+      - name: Verify macOS files and make ZIP
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f stage/JeuEchecs.app/Contents/MacOS/JeuEchecs
+          test -f stage/JeuEchecs.app/Contents/Resources/images/roiBlanc.png
+          test -f stage/JeuEchecs.app/Contents/Resources/scenarios/classique.txt
+          mkdir -p out
+          ditto -c -k --sequesterRsrc --keepParent \
+            stage/JeuEchecs.app out/JeuEchecs-macOS.zip
+
+      - name: Upload downloadable ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: out/*.zip
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download both ZIP archives
+        uses: actions/download-artifact@v4
+        with:
+          pattern: chess-*
+          path: release-files
+          merge-multiple: true
+
+      - name: Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-files/*.zip
+          generate_release_notes: true
